@@ -1,11 +1,9 @@
 import numpy as np
-# import Smooth
 import gaussian
 from scipy import optimize
 from scipy.optimize import fsolve
 import mainPeaks
 import plotting
-# import inDepth
 import shoulder
 
 """ plages proposées """

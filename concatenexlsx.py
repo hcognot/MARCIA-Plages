@@ -30,7 +30,7 @@ def createAtomFile(reponse, path, indice_nom):
     # Move the file to the destination directory
     current_directory = os.getcwd()
 
-    split_strings =path.split("\\")
+    split_strings =path.split("/")
     
     destination_directory = os.path.join(current_directory, split_strings[0], split_strings[1])
 
@@ -99,6 +99,6 @@ def createSynthesisFile (relative_path):
     # Move the file to the destination directory
     current_directory = os.getcwd()
 
-    split_strings =relative_path.split('\\')
+    split_strings =relative_path.split('/')
     destination_directory = os.path.join(current_directory, split_strings[0], split_strings[1])
     shutil.move(combined_file, destination_directory)

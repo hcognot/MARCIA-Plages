@@ -1,6 +1,5 @@
 import numpy as np
 import Smooth
-# from scipy import optimize
 from scipy.optimize import fsolve
 
 """ fonction retournant une liste avec les (maxi 4) maxima locaux et les minima locaux entre les paires de maximum"""

@@ -5,10 +5,13 @@ from scipy.optimize import fsolve
 import mainPeaks
 import plotting
 import shoulder
+"""  ***************************************************  
+                    kernel of the project 
+     ***************************************************  """
 
 """ plages proposées """
 """ proposed ranges """
-""" kernel of the project """
+
 def plage (x_data, y_data):
     majorPeaks, mean = mainPeaks.majorPeaks(x_data, y_data)
     relevantIndices = majorPeaks

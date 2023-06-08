@@ -1,7 +1,5 @@
 import numpy as np
 import Smooth
-import gaussian
-from scipy import optimize
 from scipy.optimize import fsolve
 
 

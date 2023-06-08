@@ -556,7 +556,7 @@ class Mask:
                
         """ controle de fin de programme"""
         print("on est au bout du programme.")
-        plt.show()
+        # plt.show()
 
         return reponse
                      

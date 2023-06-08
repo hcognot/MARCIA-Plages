@@ -88,12 +88,14 @@ def shoulder_list (x_data, y_data, pics, mean ):
                          # during a descent............
                          """ acceleration or steady change """
                          decreasing_curve= (y[i]-y[i-1])<0 
+                         """ drastic increase of slope on 2 successive intervalls"""
                          massive_change =  (abs(y[i]-y[i-1])*1.4 < abs(y[i+1]-y[i])) and (abs(y[i+1]-y[i])*1.4 < abs(y[i+2]-y[i+1]))
                          if (massive_change): print('massive change')
+                         """ not too close to the borders """
                          if (i < (nbl+1 ) or i > (len(y)- nbl-1-1) ):
                                steady_change = False
                          else: 
-                              
+                              """ almost a segment before, and then, a marqued change of slope"""
                               steady_change= abs((yl[i]-yl[i-1]) )> 0.9* abs((yl[i-1]-yl[i-2])) and abs( (yl[i]-yl[i-1]) ) < 1.1* abs((yl[i-2]-yl[i-1])) and ( abs(yl[i]-yl[i-1])*1.35 < abs(yl[i+1]-yl[i]) or abs(yl[i]-yl[i-1])*1.35 < abs(yl[i+2]-yl[i+1]))
                          if (steady_change): print('steady change decrease')
                          
@@ -109,11 +111,14 @@ def shoulder_list (x_data, y_data, pics, mean ):
                     #épaulement avant un mu
                     # during a rise
                          ascending_curve= (y[i]-y[i-1])>0 
+                         """ drastic decrease of slope on 2 successive intervalls"""
                          massive_change =  abs(y[i+1]-y[i])*1.4 < abs(y[i]-y[i-1]) and (abs(y[i- 1]-y[i])*1.4 < abs(y[i-2]-y[i-1]))
                          if (massive_change): print('massive change')
+                         """ not too close to the borders """
                          if (i < (nbl*2+1 ) or i > (len(y)- nbl*2-1-1) ):
                               steady_change = False
                          else:
+                              """ almost a segment before, and then, a marqued change of slope"""
                               steady_change= abs((yl[i]-yl[i-1]) )> 0.9* abs((yl[i-1]-yl[i-2])) and abs( (yl[i]-yl[i-1]) ) < 1.1* abs((yl[i-2]-yl[i-1])) and (abs(yl[i]-yl[i-1])*1.35 > abs(yl[i+1]-yl[i]) or abs(yl[i]-yl[i-1])*1.35 > abs(yl[i+2]-yl[i+1]))
                          if (steady_change): print('steady change ascend')
                          if ( massive_change or steady_change) and ascending_curve :

@@ -1,19 +1,23 @@
 import numpy as np
 import matplotlib.pyplot as plt
+""" ***************  smoothing of the data : large and tight """
 
 
 """ Fonction de lissage large"""
+""" large smoothing function : on 10% of the array of data"""
 def smooth_large(x,y):
      window_size= round(len(x)*10/100)
      return smooth(window_size, x, y), window_size
 
 """Fonction de lissage étroit"""
+""" tight smoothing function: on a window size 3 """
 def smooth_tight (x,y):
      # smallest value
      window_size = 3
      return smooth(window_size, x, y), window_size
 
-""" Fonction de lissage """        
+""" Fonction de lissage """ 
+""" non specific smoothing function """       
 def smooth (window_size, x, y):
     # modification de la valeur de la window_size si valeurs négative ou paire
     if (window_size <= 0):

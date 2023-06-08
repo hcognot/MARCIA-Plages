@@ -1,34 +1,22 @@
 import numpy as np
-import Smooth
+# import Smooth
 import gaussian
 from scipy import optimize
 from scipy.optimize import fsolve
 import mainPeaks
 import plotting
-import inDepth
+# import inDepth
 import shoulder
 
 """ plages proposées """
 """ proposed ranges """
+""" kernel of the project """
 def plage (x_data, y_data):
     majorPeaks, mean = mainPeaks.majorPeaks(x_data, y_data)
     relevantIndices = majorPeaks
 
-    """
-    if (len(relevantIndices) <4): 
-    """
-    """ add the minor peaks and limit the total number """
-    """
-        minorPeaks = inDepth.tightPeak(x_data, y_data, mean, majorPeaks)
-        if (len(minorPeaks) !=0):
-               print("Des pics mineurs sont ajoutés")
-               peaks = joinAndSort( majorPeaks, minorPeaks)
-               _ , peaks= mainPeaks.meanLow (peaks, y_data)
-               relevantIndices = peaks
-     """
     if (len(relevantIndices) <4): 
         """ add the shoulders if they exist and limit the total number """
-        #print( " bientôt les épaulements")
         shoulders = shoulder.shoulder_list (x_data, y_data, relevantIndices, mean )
         if (len(shoulders) !=0):
              print("Des épaulements sont ajoutés")
@@ -41,10 +29,10 @@ def plage (x_data, y_data):
              __ , peaksAndShoulders= mainPeaks.meanLow (peaksAndShoulders, y_data)
              relevantIndices = peaksAndShoulders               
 
-    """ paramaters of the gaussians""";
-    mu= fmu(x_data, y_data, relevantIndices)
-    amp= famp(x_data, y_data, relevantIndices)
-    sigma = fsigma(x_data, y_data, amp, mu, mean )
+    """ paramaters of the gaussians"""
+    mu= fmu(x_data, relevantIndices)
+    amp= famp(y_data, relevantIndices)
+    sigma = fsigma(x_data, y_data, amp, mu, mean)
 
     """ proposed plages """ 
     lesplages = plage_adjusted(amp, mu, sigma, x_data, y_data)
@@ -52,7 +40,6 @@ def plage (x_data, y_data):
     print (lesplages)       
 
     """ plot of the adjusted function""" 
-    
     base =  np.ones(len(x_data))  * mean
     y =  np.ones(len(x_data))
     
@@ -70,7 +57,7 @@ def plage (x_data, y_data):
 
 """ fonction retournant la liste ordonnée des valeurs centrales mu"""
 """ function providing the sorted list of gaussian central values mu"""
-def fmu(x_data, y_data, max_locaux):
+def fmu(x_data, max_locaux):
      
      mu = np.zeros(len(max_locaux))
      for i in range(0,len(max_locaux)):
@@ -83,7 +70,7 @@ def fmu(x_data, y_data, max_locaux):
 
 """ fonction retournant la liste ordonnée des amplitudes amp"""
 """ function providing the sorted list of gaussian amplitudes amp"""
-def famp(x_data, y_data, max_locaux):
+def famp(y_data, max_locaux):
      
     amp = np.zeros(len(max_locaux))
         
@@ -109,6 +96,7 @@ def fsigma (x_data, y_data, amp, mu, mean ):
 
     sigma= np.ones(4) * 25
 
+    """ adjusted function: sum of gaussians """
     def test_func(x, s0, s1, s2, s3):
         
         array_plateau = np.ones(len(x))*10**mean
@@ -116,11 +104,14 @@ def fsigma (x_data, y_data, amp, mu, mean ):
         obj= obj + (10**amp[1])*  np.exp(-((x - mu[1])**2) / (2 * (s1**2))) 
         obj= obj + (10**amp[2])*  np.exp(-((x - mu[2])**2) / (2 * (s2**2))) 
         obj= obj + (10**amp[3])*  np.exp(-((x - mu[3])**2) / (2 * (s3**2)))                   
-        return  np.maximum( array_plateau, np.log10(obj))
+        return  np.maximum( array_plateau, np.log10(obj) )
     
     # le tableau p0 fournit des valeurs de départ pour les paramètres s0 à s3
+    """ initialization of the parameters given to the test_func"""
     p0=[5,5,5,5]
+    """ possibility of adjust the sd by change of mark"""
 #     p0 = ajustedStandardDeviations (x_data, y_data, mu, amp)
+    """ for future use: if non standard P0, sheck ranges!"""
     sigma, params_covariance = optimize.curve_fit(test_func, x_data, y_data,  p0)
     
     print('les sigma, approche des écarts-type:')
@@ -135,6 +126,9 @@ def fsigma (x_data, y_data, amp, mu, mean ):
     print('nouveaux sigmas: ', sigma) 
     return sigma
 
+""" adjust the plages=ranges to some specificities:
+     1 - minimum between 2 peaks
+     2 - avoid overlapping """
 def plage_adjusted(amp, mu, sigma, x_data, y_data):
      
      """ use only the standard deviations linked to an actual central value"""
@@ -171,8 +165,6 @@ def plage_adjusted(amp, mu, sigma, x_data, y_data):
           if (lesplages[i-1][1] > lesplages[i][0]):
                print('plages qui se superposent')
                solution = separation(amp, mu, sigma, i)
-               #print ('point d\'intersection: ')
-               #print (solution)
                lesplages[i-1][1]=solution
                lesplages[i][0]=solution   
 
@@ -182,9 +174,7 @@ def plage_adjusted(amp, mu, sigma, x_data, y_data):
      if ( len(mu)>1 and  mu[len(mu)-1] >= x_data[len(x_data)-2] ):
           print('on modifie les plages')
           lesplages[-1][0]= ajustLast(mu, y_data, lesplages)
-     #else : print ('plages distinctes')  
-     
-     #print('plages ajustées:')
+    
      lesplages= np.round(lesplages, decimals=0)
 
      return lesplages
@@ -193,7 +183,7 @@ def plage_adjusted(amp, mu, sigma, x_data, y_data):
 def f(x, amp, mu, sigma, i):
      return gaussian.diff_gaussian (x, amp[i-1], mu[i-1], sigma[i-1], amp[i], mu[i], sigma[i]) 
 
-""" when 2 plages overlap, limite their extend when the 2 gaussians are equal"""
+""" when 2 plages overlap, limit their extend when the 2 gaussians are equal"""
 def separation (amp, mu, sigma, i):
      x_min= mu[i-1]
      x_max=mu[i]
@@ -229,6 +219,8 @@ def ajustLast(mu, y_data, plage):
      else:
           return max( plage[-2][1], max ( plage[-1][0], indOfMin*2))
      
+""" modify the initial standard deviation array when possible """
+""" HGC 08/06/23 : not in use"""
 def ajustedStandardDeviations (x_data, y_data, mu, amp):
      s= [5,5,5,5]
      for i in range (0, len(mu)-1):
@@ -236,6 +228,8 @@ def ajustedStandardDeviations (x_data, y_data, mu, amp):
      print(" tableau des ecart-types: ", s)
      return s
 
+""" in the range of values of y_data, search of a half heighth"""
+""" if possible, use then this halfheigth to personnalize the SD of the i-th peak"""
 def ajustedSD (x_data, y_data, mu, amp, i):
      if (i==0):
           liml = 0

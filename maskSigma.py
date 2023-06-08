@@ -35,15 +35,9 @@ from matplotlib.colors import ListedColormap
 from PIL import Image
 
 """ files and librairies added by HGC in order to extract ranges of values """
-import plotting
-import gaussian
-import Smooth
-# import parameters
 import histo_data
-import mainPeaks
 import plages
-import os
-import shutil
+
 
 hs.preferences.GUIs.warn_if_guis_are_missing = False
 hs.preferences.save()
@@ -538,9 +532,8 @@ class Mask:
         
     def create_hist(self, indice: str):
         """ create the data of the histogram
-        they can thereafter by used to suggest range values in the excel file """
-        """ for now: it is only a plotting similar to the one that already exists"""
-        """ the data will thereafter be used to propose range of data in the excel file """
+        they are thereafter used to suggest range values in the excel file """
+        """ the data will thereafter be used to propose range of data in the excel file combined_file.xlsx"""
 
         """Parameters
         ----------
@@ -548,46 +541,25 @@ class Mask:
             Name of the wanted element (eg: 'Fe')
 
         """
-        indice_nom= indice
          # Conversion of given string indices to integer indice of the cube
         indice = list(self.Elements.values()).index(str(indice))
          # Keep only finite values
         finite_data = self.data_cube[:, :, indice][np.isfinite(
             self.data_cube[:, :, indice])]
         
-
+        """ creation of the 2 sets of data """
         x_data, y_data = histo_data.create_data_y_data(finite_data)
 
-        """ plages"""
+        """ plages = ranges """
         reponse = plages.plage(x_data, y_data)
         print("reponse: " , reponse)
                
-        """ exportation des plages en . xlsx"""
-        # flattened_data = [' - '.join(map(str, pair)) for pair in reponse]
-
-        # df= pd.DataFrame(flattened_data)
-        # new_row= pd.DataFrame([[indice_nom]])
-        # df = pd.concat([new_row, df]).reset_index(drop=True)
-        
-        # nom_fichier = "plages__" + indice_nom + ".xlsx"
-               
-        # #  export the dataframe  into a single column
-        # df.to_excel(nom_fichier, index=False, header=False)
-
-        # # Move the file to the destination directory
-        # current_directory = os.getcwd()
-        # destination_directory = os.path.join(current_directory, "examples", "Data")
-        # shutil.move(nom_fichier, destination_directory)
-        
-
         """ controle de fin de programme"""
         print("on est au bout du programme.")
         plt.show()
 
         return reponse
-        
-        
-        
+                     
     
     def create_mineral_mask(self):
         """

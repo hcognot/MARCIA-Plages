@@ -31,5 +31,5 @@ tout('Cl')
 # tout('Si')
 # tout('Ti')
 
-plt.show()
+# plt.show()
 

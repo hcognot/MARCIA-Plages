@@ -26,6 +26,7 @@ def peak(x_data, y_data):
 
      """ start of the data: major peak OR tight and relative peak """
      if ((y_smooth_large[0] > y_smooth_large[window_size]) or  (y_data[0]+ y_data[1]> y_data[2]+ y_data[3] )):   
+          print('1 max en zéro')
           array_Peaks = np.append(array_Peaks, 0)
      
      """ central part of the data : significative enough peaks """
@@ -34,6 +35,7 @@ def peak(x_data, y_data):
      for i in range(window_size-1, len(y_smooth_large)-(window_size+1)):
            
           if ((y_smooth_large[i] > y_smooth_large[i-1]) and (y_smooth_large[i] > y_smooth_large[i+1])):
+               print("un max large possible en ", i )
                """ plate sommit """
                largesommit= y_smooth_large[i] > y_smooth_large[i-2] and  y_smooth_large[i] > y_smooth_large[i+ 2]
                verylargesommit = largesommit and  y_smooth_large[i] > y_smooth_large[i-3] and  y_smooth_large[i] > y_smooth_large[i+ 3]
@@ -42,16 +44,21 @@ def peak(x_data, y_data):
      
      """ end of the data: (major peak) OR (tight and relative peak) OR (final value above its smoothed data and its n-1 neigbour value) """
      if ((y_smooth_large[len(y_smooth_large)-1] > y_smooth_large[len(y_smooth_large)-window_size-1]) or  (y_data[len(y_data)-1- 0]+ y_data[len(y_data)-1-1]> y_data[len(y_data)-1-2]+ y_data[len(y_data)-1-3] ) or (y_data[len(y_data)-1- 0] >y_smooth_large[len(y_smooth_large)-1] and y_data[len(y_data)-1- 0] >y_data[len(y_data)-1-2])):
+          print('1 max en 100')
           array_Peaks = np.append(array_Peaks,len(y_smooth_large)-1 ) 
 
      """ if the array is void , fill it with the maximum of the whole y_smooth_large """ 
      if (len( array_Peaks)== 0)    :
+          print("pas de peaks repéré")
           maxindice=0
           for i in range (1, len(y_smooth_large)-1) :
+               print (i)
                if (y_smooth_large[i] > maxindice):
                     maxindice= i
           array_Peaks = np.append(array_Peaks, maxindice )
 
+     print("les pics larges bruts de bruts:")
+     print(array_Peaks)
      return array_Peaks
 
 """ detection of peaks into the central part: avoid too small peaks
@@ -113,6 +120,7 @@ def meanLow (array_pics, y_data):
 
           array_pics= arr_short
 
+     print('fin de meanLow')
      return mean, array_pics
 
 """ fonction éliminant des pics si leur valeur est marginalement supérieure au plateau: 
@@ -125,5 +133,8 @@ def getPlateauOut (array, y_data, mean):
      for i in range (0, len(array)):
          if ( y_data[int(array[i])] > mean+ 0.1 ) :
              array_temp= np.append(array_temp, array[i])
-     
+     print(' les indices conservés:')
+     print(array_temp)
+     print('fin de getPlateauOut')
+
      return array_temp

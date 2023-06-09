@@ -552,10 +552,10 @@ class Mask:
 
         """ plages = ranges """
         reponse = plages.plage(x_data, y_data)
-        print("reponse: " , reponse)
+        # print("reponse: " , reponse)
                
         """ controle de fin de programme"""
-        print("on est au bout du programme.")
+        # print("on est au bout du programme.")
         # plt.show()
 
         return reponse

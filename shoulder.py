@@ -26,9 +26,9 @@ def extrema (max_locaux, y_data):
      for i in range (1, len(max_locaux)):
           #print('first max local in main zone is ',i)
           borne_inf=int(max_locaux[i-1])
-          print('borne inf  is ',borne_inf)
+          # print('borne inf  is ',borne_inf)
           borne_sup= int(max_locaux[i])
-          print('borne sup  is ',borne_sup)
+          # print('borne sup  is ',borne_sup)
           
           min_idx = borne_inf
           min_y_value= y_data[min_idx]
@@ -37,7 +37,7 @@ def extrema (max_locaux, y_data):
                if ( y_data[j] < min_y_value):
                     min_idx = j
                     min_y_value= y_data[j]
-          print( 'minimum en', min_idx )
+          # print( 'minimum en', min_idx )
           
           if (min_idx != int(max_locaux[i-1]) and min_idx!= int(max_locaux[i])): 
                array_extrema= np.append(array_extrema, min_idx)
@@ -56,11 +56,11 @@ def extrema (max_locaux, y_data):
                          if ( y_data[j] < min_y_value):
                               min_idx = j
                               min_y_value= y_data[j]
-          print( 'minimum final en', min_idx )
+          # print( 'minimum final en', min_idx )
           array_extrema= np.append(array_extrema, min_idx)
           
-     print(" les minima placés entre les maxima locaux:")
-     print (array_extrema)
+     # print(" les minima placés entre les maxima locaux:")
+     # print (array_extrema)
      return array_extrema
 
 """ function listing the shoulders """
@@ -72,39 +72,39 @@ def shoulder_list (x_data, y_data, pics, mean ):
      extrem = extrema (pics, y_data)
 
      """ search between extrema """
-     print('array shoulder initial: ')
-     print(array_shoulder)
+     # print('array shoulder initial: ')
+     # print(array_shoulder)
      for e in range (0 , len(extrem)-1):
-          print('début d\'intervalle: ', e)
+          # print('début d\'intervalle: ', e)
           """ not too small interval """
           if (extrem[e+1]- extrem[e]> 2*(nb+1)):
                """ no too close from the extrema """
                for i in range(int(extrem[e])+ nb+1, int(extrem[e+1] - nb-1)):
-                    print('ieme élément: ', i)
+                    # print('ieme élément: ', i)
                
                     if (i>nb and i<len(y)-nb-1 and y[i] > mean):
-                         print('on rentre dans la boucle pour ', i)
+                         # print('on rentre dans la boucle pour ', i)
                          # épaulement après un mu
                          # during a descent............
                          """ acceleration or steady change """
                          decreasing_curve= (y[i]-y[i-1])<0 
                          """ drastic increase of slope on 2 successive intervalls"""
                          massive_change =  (abs(y[i]-y[i-1])*1.4 < abs(y[i+1]-y[i])) and (abs(y[i+1]-y[i])*1.4 < abs(y[i+2]-y[i+1]))
-                         if (massive_change): print('massive change')
+                         # if (massive_change): print('massive change')
                          """ not too close to the borders """
                          if (i < (nbl+1 ) or i > (len(y)- nbl-1-1) ):
                                steady_change = False
                          else: 
                               """ almost a segment before, and then, a marqued change of slope"""
                               steady_change= abs((yl[i]-yl[i-1]) )> 0.9* abs((yl[i-1]-yl[i-2])) and abs( (yl[i]-yl[i-1]) ) < 1.1* abs((yl[i-2]-yl[i-1])) and ( abs(yl[i]-yl[i-1])*1.35 < abs(yl[i+1]-yl[i]) or abs(yl[i]-yl[i-1])*1.35 < abs(yl[i+2]-yl[i+1]))
-                         if (steady_change): print('steady change decrease')
+                         # if (steady_change): print('steady change decrease')
                          
                          if ( massive_change or steady_change) and decreasing_curve :
                          
-                              print('ajout d\'une valeur')
+                              # print('ajout d\'une valeur')
                               array_shoulder = np.append(array_shoulder, i)
-                              print( 'array_shoulder en descente temp pour i = ',i)
-                              print(array_shoulder)
+                              # print( 'array_shoulder en descente temp pour i = ',i)
+                              # print(array_shoulder)
                               #  only one shoulder in this intervall
                               if len(array_shoulder) !=0:
                                    break
@@ -113,23 +113,23 @@ def shoulder_list (x_data, y_data, pics, mean ):
                          ascending_curve= (y[i]-y[i-1])>0 
                          """ drastic decrease of slope on 2 successive intervalls"""
                          massive_change =  abs(y[i+1]-y[i])*1.4 < abs(y[i]-y[i-1]) and (abs(y[i- 1]-y[i])*1.4 < abs(y[i-2]-y[i-1]))
-                         if (massive_change): print('massive change')
+                         # if (massive_change): print('massive change')
                          """ not too close to the borders """
                          if (i < (nbl*2+1 ) or i > (len(y)- nbl*2-1-1) ):
                               steady_change = False
                          else:
                               """ almost a segment before, and then, a marqued change of slope"""
                               steady_change= abs((yl[i]-yl[i-1]) )> 0.9* abs((yl[i-1]-yl[i-2])) and abs( (yl[i]-yl[i-1]) ) < 1.1* abs((yl[i-2]-yl[i-1])) and (abs(yl[i]-yl[i-1])*1.35 > abs(yl[i+1]-yl[i]) or abs(yl[i]-yl[i-1])*1.35 > abs(yl[i+2]-yl[i+1]))
-                         if (steady_change): print('steady change ascend')
+                         # if (steady_change): print('steady change ascend')
                          if ( massive_change or steady_change) and ascending_curve :
                               array_shoulder = np.append(array_shoulder, i)
-                              print( 'array_shoulder en montée temp pour i = ',i)
-                              print(array_shoulder)   
+                              # print( 'array_shoulder en montée temp pour i = ',i)
+                              # print(array_shoulder)   
                               #  only one shoulder in this intervall
                               if len(array_shoulder) !=0:
                                         break   
-               print('sortie de l\' intervalle',  e)               
-     print('indice(s) d\'épaulement:')
-     print(array_shoulder)
+               # print('sortie de l\' intervalle',  e)               
+     # print('indice(s) d\'épaulement:')
+     # print(array_shoulder)
           
      return array_shoulder

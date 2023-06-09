@@ -20,7 +20,7 @@ def plage (x_data, y_data):
         """ add the shoulders if they exist and limit the total number """
         shoulders = shoulder.shoulder_list (x_data, y_data, relevantIndices, mean )
         if (len(shoulders) !=0):
-             print("Des épaulements sont ajoutés")
+          #    print("Des épaulements sont ajoutés")
              peaksAndShoulders = joinAndSort( relevantIndices, shoulders)
              """ épaulement très près des extrémités: ce sont les extrémités qui sont anormales, on les supprime """  
              if (peaksAndShoulders[1]- peaksAndShoulders[0] <= 5): 
@@ -37,8 +37,8 @@ def plage (x_data, y_data):
 
     """ proposed plages """ 
     lesplages = plage_adjusted(amp, mu, sigma, x_data, y_data)
-    print ('Les plages proposées: ')
-    print (lesplages)       
+#     print ('Les plages proposées: ')
+#     print (lesplages)       
 
     """ plot of the adjusted function""" 
     base =  np.ones(len(x_data))  * mean
@@ -50,9 +50,9 @@ def plage (x_data, y_data):
          if (y[j] ==0):
               y[j] = 1
 
-    y_calc = np.maximum(base, np.log10(y))     
+#     y_calc = np.maximum(base, np.log10(y))     
 
-    plotting.trace_ajuste(x_data, y_data, y_calc, 'fonction ajustée')
+#     plotting.trace_ajuste(x_data, y_data, y_calc, 'fonction ajustée')
   
     return lesplages
 
@@ -64,8 +64,8 @@ def fmu(x_data, max_locaux):
      for i in range(0,len(max_locaux)):
          mu[i]= x_data[int(max_locaux[i]) ]     
 
-     print('les mu:')   
-     print(mu)  
+     # print('les mu:')   
+     # print(mu)  
     
      return mu
 
@@ -77,8 +77,8 @@ def famp(y_data, max_locaux):
         
     for i in range(0,len(max_locaux)):
          amp[i]= y_data[int(max_locaux[i]) ]
-    print('les amplitudes:')   
-    print(amp)  
+#     print('les amplitudes:')   
+#     print(amp)  
     
     return amp
 
@@ -115,16 +115,16 @@ def fsigma (x_data, y_data, amp, mu, mean ):
     """ for future use: if non standard P0, sheck ranges!"""
     sigma, params_covariance = optimize.curve_fit(test_func, x_data, y_data,  p0)
     
-    print('les sigma, approche des écarts-type:')
-    print('Seules les '+ str(nbReel) + ' premières valeurs sont à considérer')
-    print(sigma)
+#     print('les sigma, approche des écarts-type:')
+#     print('Seules les '+ str(nbReel) + ' premières valeurs sont à considérer')
+#     print(sigma)
 
     """ problème de sigma négatifs : remplacement forcé par valeur positive petite"""
     for i in range (0, len(sigma)):
          if (sigma[i] < 0):
               sigma[i] = 1
 
-    print('nouveaux sigmas: ', sigma) 
+#     print('nouveaux sigmas: ', sigma) 
     return sigma
 
 """ adjust the plages=ranges to some specificities:
@@ -144,10 +144,10 @@ def plage_adjusted(amp, mu, sigma, x_data, y_data):
           y_slice = y_data[liminf:limsup+1]             
           # Find the index of the minimum value in the sliced array
           min_index = np.argmin(y_slice)
-          print(' indice au minimum  ', min_index)
+          # print(' indice au minimum  ', min_index)
           # Calculate the overall index of the minimum value within y_data
           overall_min_index = min_index + liminf
-          print(' indice au over all minimum  ', overall_min_index)
+          # print(' indice au over all minimum  ', overall_min_index)
           # Get the minimum value using the index
           minivalue = y_data[overall_min_index]
           """ absolute minimum no part of a plateau """
@@ -157,23 +157,23 @@ def plage_adjusted(amp, mu, sigma, x_data, y_data):
                plateau = True
           if (minivalue*1.4 < max( amp[i-1], amp[i]) and (plateau== False or mu[i]>=96) ):
                lesplages[i-1][1]=x_data[overall_min_index]
-               print(' borne sup de l\'intervalle d\'avant:  ', lesplages[i-1][1])
+               # print(' borne sup de l\'intervalle d\'avant:  ', lesplages[i-1][1])
                lesplages[i][0]= x_data[overall_min_index]
      
      """ limit between plages so that they do not overlap"""
      # si superposition des plages, recherche du point de séparation
      for i in range (1, len(mu)):
           if (lesplages[i-1][1] > lesplages[i][0]):
-               print('plages qui se superposent')
+               # print('plages qui se superposent')
                solution = separation(amp, mu, sigma, i)
                lesplages[i-1][1]=solution
                lesplages[i][0]=solution   
 
-     print('dernier mu:', mu[len(mu)-1] )
-     print('derniers x_data: ', x_data[len(x_data)-2])
+     # print('dernier mu:', mu[len(mu)-1] )
+     # print('derniers x_data: ', x_data[len(x_data)-2])
      """ final maximum can be a narrow """
      if ( len(mu)>1 and  mu[len(mu)-1] >= x_data[len(x_data)-2] ):
-          print('on modifie les plages')
+          # print('on modifie les plages')
           lesplages[-1][0]= ajustLast(mu, y_data, lesplages)
     
      lesplages= np.round(lesplages, decimals=0)
@@ -198,7 +198,7 @@ def joinAndSort( arraya, arrayb):
      temp = np.append(arraya, arrayb)
      temp= np.sort(temp)
 
-     print('nouvelle liste: ', temp)
+     # print('nouvelle liste: ', temp)
      return temp
 
 """ function adjusting the last range"""
@@ -213,7 +213,7 @@ def ajustLast(mu, y_data, plage):
           if ( y_data[i]< valueOfMin):
                valueOfMin= y_data[i]
                indOfMin= i
-     print ('indice du minimum', indOfMin)
+     # print ('indice du minimum', indOfMin)
      """" do not overlap mith the previous range """
      if (indOfMin*2 >= 96):
           return max(plage[-2][1], 95)
@@ -226,7 +226,7 @@ def ajustedStandardDeviations (x_data, y_data, mu, amp):
      s= [5,5,5,5]
      for i in range (0, len(mu)-1):
           s[i] = ajustedSD(x_data, y_data, mu, amp, i)
-     print(" tableau des ecart-types: ", s)
+     # print(" tableau des ecart-types: ", s)
      return s
 
 """ in the range of values of y_data, search of a half heighth"""
@@ -236,35 +236,35 @@ def ajustedSD (x_data, y_data, mu, amp, i):
           liml = 0
      else:
           liml = mu[i-1]
-          print(' liml: ' , liml)
+          # print(' liml: ' , liml)
      
      if (i == len(mu)-1):
           limr = x_data[len(x_data)-1]
      else:
           limr = mu [i+1]
-          print(' limr: ' , limr)
+          # print(' limr: ' , limr)
 
      """ half height left side of mu"""
      halfl = -10         # absurd value
      j= int(mu[i]/2)
           
      while ( x_data[j] >= liml and y_data[j]> amp[i]/2 and j>0 )   :
-          print('j avant :', j)
+          # print('j avant :', j)
           j=j-1
      if (x_data[j] > liml ):
           halfl= x_data[j]
-          print('halfl: ', halfl)
+          # print('halfl: ', halfl)
 
      """ half height right side of mu"""
      halfr = -10         # absurd value
      k= int(mu[i]/2)
     
      while ( x_data[k] <= limr and y_data[k]> amp[i]/2 and k< len(x_data)-1)   :
-          print('k après: ', k)
+          # print('k après: ', k)
           k=k+1
      if (x_data[k] < limr-1):
           halfr= x_data[k]
-          print('halfr: ', halfr)
+          # print('halfr: ', halfr)
 
      
      if ( halfl == -10 and halfr == -10):

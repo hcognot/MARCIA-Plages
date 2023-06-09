@@ -53,22 +53,22 @@ def createSynthesisFile (relative_path):
     split_strings =relative_path.split("/")
     current_directory= os.getcwd()
 
-    print(os.getcwd())
+    # print(os.getcwd())
 
     # Specify the target directory
     target_directory = os.path.join(current_directory, relative_path)
-    print("Target directory:", target_directory)
+    # print("Target directory:", target_directory)
 
     # List the files in the target directory
-    file_list = os.listdir(target_directory)
-    print("Files in the target directory:")
-    for file_name in file_list:
-        print(file_name)
+    # file_list = os.listdir(target_directory)
+    # print("Files in the target directory:")
+    # for file_name in file_list:
+        # print(file_name)
 
     # List the .xlsx files beginning by 'plages' in the current directory
     xlsx_files = [file for file in  os.listdir(target_directory) if file.startswith('plages')]
-    print("Filtered XLSX files:")
-    print(xlsx_files)
+    # print("Filtered XLSX files:")
+    # print(xlsx_files)
     # Create an empty DataFrame to store the combined lines
     combined_data = pd.DataFrame()
 

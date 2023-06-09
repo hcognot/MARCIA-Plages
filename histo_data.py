@@ -38,8 +38,13 @@ def create_data_y_data(finite_data):
         y_data = np.log10(y_dat) 
 
         if (NeedofLinealisation):   
-           y_data= linearising(y_data)
-               
+            """ plotting of the basic data"""
+            plotting.trace(x_data, y_data, 'données parcellaires')
+            y_data= linearising(y_data)
+       
+        """ pottling of the resulting data"""
+        plotting.trace(x_data, y_data, 'données brutes')
+
         """ interpolation for out of the way data """
         y_data = outOfTheWayCorrection(y_data)
 
@@ -85,7 +90,8 @@ def soundsmoothing(x, y):
      for i in range (1, len(y)-1):
           if ( (abs(y[i]- y[i-1]) + abs(y[i+1]- y[i]) > 0.1*delta) and ((y[i]- y[i-1])*(y[i+1]- y[i]) >0 )  ):
                count= count+1
-     
+     print ('count:', count)
+     print('len de y', len(y))
      if (count < len(y) *0.05):
           """ no need """
           return y
@@ -97,7 +103,9 @@ def soundsmoothing(x, y):
           """ change of y data : mean of 2 successive data"""
           for i in range (0, len(y)-1):
                y[i]= (y[i]+ y[i+1])/2
-                               
+                    
+          """ plotting of the resulting data"""
+          plotting.trace(x, y, 'données sans bruit')     
           return y
 
 """ Linear interpolation of data far off their direct neighbours"""

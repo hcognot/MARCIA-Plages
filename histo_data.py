@@ -5,6 +5,13 @@ import seaborn as sns
 
 import plotting
 
+""" From the brut data, achieve several treatments:
+          - completion 
+          - linearisation
+          - smoothing
+          - transfer to logarithm 
+"""
+
 def create_data_y_data(finite_data):
         """ create the data of the histogram"""
         
@@ -39,11 +46,11 @@ def create_data_y_data(finite_data):
 
         if (NeedofLinealisation):   
             """ plotting of the basic data"""
-            plotting.trace(x_data, y_data, 'données parcellaires')
+          #   plotting.trace(x_data, y_data, 'données parcellaires')
             y_data= linearising(y_data)
        
         """ pottling of the resulting data"""
-        plotting.trace(x_data, y_data, 'données brutes')
+     #    plotting.trace(x_data, y_data, 'données brutes')
 
         """ interpolation for out of the way data """
         y_data = outOfTheWayCorrection(y_data)
@@ -90,8 +97,8 @@ def soundsmoothing(x, y):
      for i in range (1, len(y)-1):
           if ( (abs(y[i]- y[i-1]) + abs(y[i+1]- y[i]) > 0.1*delta) and ((y[i]- y[i-1])*(y[i+1]- y[i]) >0 )  ):
                count= count+1
-     print ('count:', count)
-     print('len de y', len(y))
+     # print ('count:', count)
+     # print('len de y', len(y))
      if (count < len(y) *0.05):
           """ no need """
           return y
@@ -105,15 +112,14 @@ def soundsmoothing(x, y):
                y[i]= (y[i]+ y[i+1])/2
                     
           """ plotting of the resulting data"""
-          plotting.trace(x, y, 'données sans bruit')     
+          # plotting.trace(x, y, 'données sans bruit')     
           return y
 
 """ Linear interpolation of data far off their direct neighbours"""
 """ do not apply to 3 1st and last data ( dramatic changes accepted at these locations )"""
 def outOfTheWayCorrection(y):
      """ massive out of the way data """
-     for i in range (3, len(y)-4): 
-          # if ( (y[i] > (y[i-1]+y[i+1])/2 +0.2 ) or (y[i] < (y[i-1]+y[i+1])/2 -0.2 ) ):
+     for i in range (3, len(y)-4):           
           """ choice: only the values under the trend"""
           if (y[i] < (y[i-1]+y[i+1])/2 -0.2 ) :    
                y[i] = (y[i-1]+y[i+1])/2

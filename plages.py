@@ -124,7 +124,7 @@ def fsigma (x_data, y_data, amp, mu, mean ):
          if (sigma[i] < 0):
               sigma[i] = 1
 
-#     print('nouveaux sigmas: ', sigma) 
+    print('nouveaux sigmas: ', sigma) 
     return sigma
 
 """ adjust the plages=ranges to some specificities:

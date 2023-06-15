@@ -12,12 +12,12 @@
 ## Install to be modified !!!!!!!!! 
 Just do
 ```bash
-pip install MARCIA-plages
+pip install MARCIA-Plages
 ```
 
 ## Use in python to be modified !!!!!!!!!!
 ```python
-from MARCIA-plages.mask import Mask
+from MARCIA-Plages.mask import Mask
 ```
 
 ## Gallery

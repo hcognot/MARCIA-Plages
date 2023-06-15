@@ -8,13 +8,13 @@
  - Classes can then be extracted and read with hyperspy or PyMca or Esprit
 
 
-## Install
+## Install to be modified !!!!!!!!! 
 Just do
 ```bash
 pip install marcia
 ```
 
-## Use in python
+## Use in python to be modified !!!!!!!!!!
 ```python
 from marcia.mask import Mask
 ```

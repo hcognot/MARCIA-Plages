@@ -17,7 +17,7 @@ pip install MARCIA-Plages
 
 ## Use in python to be modified !!!!!!!!!!
 ```python
-from MARCIA-Plages.mask import Mask
+from MARCIA-Plages.maskSigma import Mask
 ```
 
 ## Gallery

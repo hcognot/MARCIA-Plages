@@ -20,14 +20,14 @@ def plage (x_data, y_data):
         """ add the shoulders if they exist and limit the total number """
         shoulders = shoulder.shoulder_list (x_data, y_data, relevantIndices, mean )
         if (len(shoulders) !=0):
-          #    print("Des épaulements sont ajoutés")
+             print("Des épaulements sont ajoutés")
              peaksAndShoulders = joinAndSort( relevantIndices, shoulders)
              """ épaulement très près des extrémités: ce sont les extrémités qui sont anormales, on les supprime """  
              if (peaksAndShoulders[1]- peaksAndShoulders[0] <= 5): 
                   peaksAndShoulders = peaksAndShoulders[1:]
              if (peaksAndShoulders[len(peaksAndShoulders)-1] - peaksAndShoulders[len(peaksAndShoulders)-2] <= 5 ):
                   peaksAndShoulders = peaksAndShoulders[:-1]
-             __ , peaksAndShoulders= mainPeaks.meanLow (peaksAndShoulders, y_data)
+             __ , peaksAndShoulders= mainPeaks.basisLow (peaksAndShoulders, y_data)
              relevantIndices = peaksAndShoulders               
 
     """ paramaters of the gaussians"""
@@ -37,8 +37,8 @@ def plage (x_data, y_data):
 
     """ proposed plages """ 
     lesplages = plage_adjusted(amp, mu, sigma, x_data, y_data)
-#     print ('Les plages proposées: ')
-#     print (lesplages)       
+    print ('Les plages proposées: ')
+    print (lesplages)       
 
     """ plot of the adjusted function""" 
     base =  np.ones(len(x_data))  * mean
@@ -50,9 +50,9 @@ def plage (x_data, y_data):
          if (y[j] ==0):
               y[j] = 1
 
-#     y_calc = np.maximum(base, np.log10(y))     
+    y_calc = np.maximum(base, np.log10(y))     
 
-#     plotting.trace_ajuste(x_data, y_data, y_calc, 'fonction ajustée')
+    plotting.trace_ajuste(x_data, y_data, y_calc, 'fonction ajustée')
   
     return lesplages
 

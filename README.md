@@ -9,13 +9,13 @@
  - Help for the MARCIA user : file of plages = ranges for each element 
 
 
-## Install to be tested !!!!!!!!! 
+## Install Python dependencies  
 Just do
 ```bash
-pip install MARCIA-Plages
+python setup.py develop
 ```
 
-## Use in python to be tested !!!!!!!!!!
+## Use in python
 ```python
 from MARCIA-Plages.maskSigma import Mask
 ```
